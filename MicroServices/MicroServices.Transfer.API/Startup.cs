@@ -29,7 +29,11 @@ namespace MicroServices.Transfer.API {
                 options.UseSqlServer(Configuration.GetConnectionString("TransferDbConnection"));
             });
             services.AddSwaggerGen(sw => {
-                sw.SwaggerDoc("v1", new OpenApiInfo { Title = "Transfer MicroServices ", Version = "v1" });
+                sw.SwaggerDoc("v1", new OpenApiInfo {
+                    Title = "Transfer MicroServices",
+                    Version = "v1",
+                    Description = "Transfer bounded-context API (.NET 10)"
+                });
             });
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<Startup>());
             services.AddControllers();
