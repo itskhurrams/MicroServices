@@ -5,6 +5,7 @@ using MicroServices.Banking.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MicroServices.Banking.API.Controllers {
     [ApiController]
@@ -17,13 +18,13 @@ namespace MicroServices.Banking.API.Controllers {
         }
 
         [HttpGet]
-        public IEnumerable<Account> Get() {
-            return _accountService.GetAccounts();
+        public Task<IEnumerable<Account>> Get() {
+            return _accountService.GetAccountsAsync();
         }
         [HttpPost]
-        public IActionResult Post([FromBody] AccountTransfer accountTransfer) {
-            _accountService.Transfer(accountTransfer);
-            return Ok(null);
+        public async Task<IActionResult> Post([FromBody] AccountTransfer accountTransfer) {
+            await _accountService.TransferAsync(accountTransfer);
+            return Ok();
         }
     }
 }

@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 
 namespace MicroServices.Banking.API {
     public class Startup {
@@ -26,15 +26,19 @@ namespace MicroServices.Banking.API {
                 options.UseSqlServer(Configuration.GetConnectionString("BankingDbConnection"));
             });
             services.AddSwaggerGen(sw => {
-                sw.SwaggerDoc("v1", new OpenApiInfo { Title = "Banking MicroServices ", Version = "v1" });
+                sw.SwaggerDoc("v1", new OpenApiInfo {
+                    Title = "Banking MicroServices",
+                    Version = "v1",
+                    Description = "Banking bounded-context API (.NET 10)"
+                });
             });
-            services.AddMediatR(typeof(Startup));
+            services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<Startup>());
             services.AddControllers();
             RegisterServices(services);
         }
 
         private void RegisterServices(IServiceCollection services) {
-            DependencyContainer.RegisterServices(services);
+            DependencyContainer.RegisterServices(services, Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
