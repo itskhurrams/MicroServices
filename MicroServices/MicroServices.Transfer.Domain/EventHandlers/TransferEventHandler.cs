@@ -12,12 +12,11 @@ namespace MicroServices.Transfer.Domain.EventHandlers {
             _transferRepository = transferRepository;
         }
         public Task Handle(TransferCreatedEvent @event) {
-            _transferRepository.Add(new TransferLog() {
+            return _transferRepository.AddAsync(new TransferLog() {
                 AccountFrom = @event.From,
                 AccountTo = @event.To,
                 TransferAmount = @event.Amount
             });
-            return Task.CompletedTask;
         }
     }
 }
