@@ -2,7 +2,10 @@
 using MicroServices.Banking.Domain.Interfaces;
 using MicroServices.Banking.Domain.Models;
 
+using Microsoft.EntityFrameworkCore;
+
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MicroServices.Banking.Data.Repository {
     public class AccountRepository : IAccountRepository {
@@ -10,8 +13,8 @@ namespace MicroServices.Banking.Data.Repository {
         public AccountRepository(BankingDbContext bankingDbContext) {
             _bankingDbContext = bankingDbContext;
         }
-        public IEnumerable<Account> GetAccounts() {
-            return _bankingDbContext.Accounts;
+        public async Task<IEnumerable<Account>> GetAccountsAsync() {
+            return await _bankingDbContext.Accounts.ToListAsync();
         }
     }
 }
