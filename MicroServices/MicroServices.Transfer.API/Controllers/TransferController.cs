@@ -4,6 +4,7 @@ using MicroServices.Transfer.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MicroServices.Transfer.API.Controllers {
     [ApiController]
@@ -15,8 +16,8 @@ namespace MicroServices.Transfer.API.Controllers {
         }
 
         [HttpGet]
-        public IEnumerable<TransferLog> Get() {
-            return _transferService.GetTransferLogs();
+        public Task<IEnumerable<TransferLog>> Get() {
+            return _transferService.GetTransferLogsAsync();
         }
     }
 }

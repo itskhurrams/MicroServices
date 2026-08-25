@@ -13,7 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 
 namespace MicroServices.Transfer.API {
     public class Startup {
@@ -31,12 +31,12 @@ namespace MicroServices.Transfer.API {
             services.AddSwaggerGen(sw => {
                 sw.SwaggerDoc("v1", new OpenApiInfo { Title = "Transfer MicroServices ", Version = "v1" });
             });
-            services.AddMediatR(typeof(Startup));
+            services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<Startup>());
             services.AddControllers();
             RegisterServices(services);
         }
         private void RegisterServices(IServiceCollection services) {
-            DependencyContainer.RegisterServices(services);
+            DependencyContainer.RegisterServices(services, Configuration);
         }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env) {
@@ -63,7 +63,7 @@ namespace MicroServices.Transfer.API {
 
         private void ConfigureEventBus(IApplicationBuilder app) {
             var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
-            eventBus.Subscribe<TransferCreatedEvent, TransferEventHandler>();
+            eventBus.Subscribe<TransferCreatedEvent, TransferEventHandler>().GetAwaiter().GetResult();
         }
     }
 }
