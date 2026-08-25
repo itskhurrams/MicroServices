@@ -1,9 +1,10 @@
 ﻿using MicroServices.Transfer.Domain.Models;
 
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MicroServices.Transfer.Application.Interfaces {
     public interface ITransferService {
-        IEnumerable<TransferLog> GetTransferLogs();
+        Task<IEnumerable<TransferLog>> GetTransferLogsAsync();
     }
 }

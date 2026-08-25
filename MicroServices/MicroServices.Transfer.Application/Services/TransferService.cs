@@ -4,6 +4,7 @@ using MicroServices.Transfer.Domain.Interfaces;
 using MicroServices.Transfer.Domain.Models;
 
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MicroServices.Transfer.Application.Services {
     public class TransferService : ITransferService {
@@ -14,8 +15,8 @@ namespace MicroServices.Transfer.Application.Services {
             _transferRepository = transferRepository;
             _eventBus = eventBus;
         }
-        public IEnumerable<TransferLog> GetTransferLogs() {
-            return _transferRepository.GetTransferLogs();
+        public Task<IEnumerable<TransferLog>> GetTransferLogsAsync() {
+            return _transferRepository.GetTransferLogsAsync();
         }
     }
 }
