@@ -6,6 +6,7 @@ using MicroServices.Banking.Domain.Models;
 using MicroServices.Domain.Core.Bus;
 
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MicroServices.Banking.Application.Services {
     public class AccountService : IAccountService {
@@ -16,13 +17,13 @@ namespace MicroServices.Banking.Application.Services {
             _accountRepository = accountRepository;
             _eventBus = eventBus;
         }
-        public IEnumerable<Account> GetAccounts() {
-            return _accountRepository.GetAccounts();
+        public Task<IEnumerable<Account>> GetAccountsAsync() {
+            return _accountRepository.GetAccountsAsync();
         }
 
-        public void Transfer(AccountTransfer accountTransfer) {
+        public Task TransferAsync(AccountTransfer accountTransfer) {
             var transferCommand = new CreateTransferCommand(accountTransfer.FromAccount, accountTransfer.ToAccount, accountTransfer.TransferAmount);
-            _eventBus.SendCommand(transferCommand);
+            return _eventBus.SendCommand(transferCommand);
         }
     }
 }
