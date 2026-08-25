@@ -2,7 +2,10 @@
 using MicroServices.Transfer.Domain.Interfaces;
 using MicroServices.Transfer.Domain.Models;
 
+using Microsoft.EntityFrameworkCore;
+
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MicroServices.Transfer.Data.Repository {
     public class TransferRepository : ITransferRepository {
@@ -11,13 +14,13 @@ namespace MicroServices.Transfer.Data.Repository {
             _transferDbContext = transferDbContext;
         }
 
-        public void Add(TransferLog transferLog) {
-            _transferDbContext.Add(transferLog);
-            _transferDbContext.SaveChanges();
+        public async Task AddAsync(TransferLog transferLog) {
+            await _transferDbContext.AddAsync(transferLog);
+            await _transferDbContext.SaveChangesAsync();
         }
 
-        public IEnumerable<TransferLog> GetTransferLogs() {
-            return _transferDbContext.TransferLogs;
+        public async Task<IEnumerable<TransferLog>> GetTransferLogsAsync() {
+            return await _transferDbContext.TransferLogs.ToListAsync();
         }
     }
 }
